@@ -400,6 +400,26 @@ namespace PublicHoliday
         public const string VictoryDayKZ = "VictoryDayKZ";
         #endregion
 
+        #region Latvia
+        /// <summary>Day of the Bronze Medal Win.</summary>
+        public const string BronzeMedalDayLV = "BronzeMedalDayLV";
+        /// <summary>Midsummer Eve.</summary>
+        public const string LigoDayLV = "LigoDayLV";
+        /// <summary>Midsummer Day.</summary>
+        public const string MidsummerDayLV = "MidsummerDayLV";
+        /// <summary>Mother's Day.</summary>
+        public const string MothersDayLV = "MothersDayLV";
+        /// <summary>Pastoral Visit of Pope Francis.</summary>
+        public const string PopeFrancisVisitLV = "PopeFrancisVisitLV";
+        /// <summary>Proclamation of the Republic of Latvia.</summary>
+        public const string ProclamationDayLV = "ProclamationDayLV";
+        /// <summary>Restoration of Independence Day.</summary>
+        public const string RestorationOfIndependenceDayLV = "RestorationOfIndependenceDayLV";
+        /// <summary>Second Day of Christmas.</summary>
+        public const string SecondChristmasDayLV = "SecondChristmasDayLV";
+        /// <summary>Song and Dance Festival Closing Day.</summary>
+        public const string SongAndDanceFestivalLV = "SongAndDanceFestivalLV";
+        #endregion
 
         #region Lithuania
         /// <summary>Father's Day.</summary>

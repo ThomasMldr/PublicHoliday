@@ -33,17 +33,13 @@ namespace PublicHolidayTests
             foreach (var code in new[]
             {
                 "AU", "AT", "BE", "BR", "CA", "CZ", "DK", "NL", "EE", "FI", "FR", "DE", "GR",
-                "HR", "HU", "IE", "IT", "JP", "KZ", "LT", "LU", "MX", "NZ", "NO", "PL", "PT",
-                "RO", "RS", "SK", "SI", "ZA", "ES", "SE", "CH", "TR", "GB", "US",
+                "HR", "HU", "IE", "IT", "JP", "KZ", "LT", "LV", "LU", "ME", "MX", "NZ", "NO", "PL",
+                "PT", "RO", "RS", "SK", "SI", "ZA", "ES", "SE", "CH", "TR", "GB", "US",
             })
             {
                 var calendar = PublicHolidayFactory.GetPublicHolidayForCountry(code);
                 variants.Add(calendar.GetType().Name, calendar);
             }
-
-            // Montenegro is missing from PublicHolidayCountryCode/the factory (pre-existing gap,
-            // flagged for the cleanup phase) - include it directly
-            variants.Add(nameof(MontenegroPublicHoliday), new MontenegroPublicHoliday());
 
             // Special (non-country) calendars
             variants.Add(nameof(CanadaQuebecGovClosingDay), new CanadaQuebecGovClosingDay());

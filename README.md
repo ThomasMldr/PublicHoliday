@@ -46,6 +46,7 @@ There are libraries for:
   - Hungary: HungaryPublicHoliday
   - Ireland : IrelandPublicHoliday
   - Italy : ItalyPublicHoliday
+  - Latvia : LatviaPublicHoliday
   - Lithuania : LithuaniaPublicHoliday
   - Luxembourg : LuxembourgPublicHoliday
   - Montenegro : MontenegroPublicHoliday
@@ -289,6 +290,14 @@ For many countries, when holidays fall on a weekend, the next working Monday bec
 In the USA, when holidays fall on Sundays, the holiday is moved to Monday. When the holiday falls on Saturday, the holiday is moved to the preceding Friday. The USA Federal Reserve holidays differ slightly, as holidays that fall on a Saturday do not cause a closure on the preceding Friday as described [on the Federal Reserve's website.](https://www.federalreserve.gov/aboutthefed/k8.htm)
 
 For most of Europe, there is no standard rule for when the holidays fall on weekends. Normally these days are just added to the annual leave.  
+
+Some countries mondayise only part of their calendar. **Latvia** does it for the three holidays its law names - 4 May, 18 November and the Song and Dance Festival closing day - and not for Christmas or New Year's Eve. `HolidayDate` is then the date in the law and `ObservedDate` the day off that follows it:
+```C#
+// 4 May 2024 was a Saturday, so the day off was Monday 6 May
+var restoration = new LatviaPublicHoliday().PublicHolidaysInformation(2024)
+    .Single(h => h.HolidayDate == new DateTime(2024, 5, 4));
+// restoration.ObservedDate == 2024-05-06
+```
 
 ## Variations by states and province 
 
