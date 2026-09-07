@@ -21,7 +21,8 @@ namespace PublicHolidayTests
     /// (configuration, culture, key, name) so a lost or altered name shows up as a diff.
     /// </para>
     /// Same workflow as the other golden master: a missing fixture is generated and reported
-    /// Inconclusive; delete the fixture to accept an intentional change, and review the diff.
+    /// Inconclusive; to accept an intentional change, re-record with
+    /// <c>PUBLICHOLIDAY_UPDATE_GOLDEN=1 dotnet test</c> and review the git diff.
     /// </summary>
     [TestClass]
     public class AllNamesGoldenMasterTest
@@ -53,11 +54,12 @@ namespace PublicHolidayTests
             var actual = string.Join("\n", rows) + "\n";
             var file = Path.Combine(FixtureDirectory(), "AllNames.txt");
 
-            if (!File.Exists(file))
+            if (GoldenMasterFixtures.UpdateRequested || !File.Exists(file))
             {
+                var what = File.Exists(file) ? "Re-recorded" : "Generated";
                 Directory.CreateDirectory(FixtureDirectory());
                 File.WriteAllText(file, actual, new UTF8Encoding(false));
-                Assert.Inconclusive($"Generated AllNames.txt ({rows.Count} names). Re-run to verify against it.");
+                Assert.Inconclusive($"{what} AllNames.txt ({rows.Count} names). Review 'git diff tests/PublicHolidayTests/GoldenMaster/AllNames.txt', then re-run to verify against it.");
             }
 
             var expected = File.ReadAllText(file).Replace("\r\n", "\n");

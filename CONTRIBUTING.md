@@ -218,7 +218,7 @@ call `ClearHolidayCache()`. Genuine one-off days (royal weddings, mourning days)
   of externally verified dates (movable feasts, year gates, weekend shifts — the interesting
   ones, not every fixed date).
 
-Nothing to register for the resource file — the csproj includes `Localization\Names.*.resx` by
+Nothing to register for the resource file — the csproj includes `Localization\Names\*.resx` by
 wildcard.
 
 ### 5. Golden master
@@ -324,10 +324,18 @@ csproj): compiling `.resx` for the net35 target needs `ResGen.exe`, which the .N
 MSBuild cannot run, so `dotnet build` would fail outright. Don't "fix" that item.
 
 For a behavior-preserving change (refactor, promotion of a shared class), the golden-master
-fixtures must be **byte-identical**. For an intentional behavior change: copy the affected
-fixture aside first (the folder may be untracked), delete it, rerun to regenerate, and diff old
-vs new — every changed line must be explainable by your change. Never regenerate fixtures to
-make a red test green without reading the diff. Remember there are two: the dates fixture per
-calendar, and `AllNames.txt` for names across every configuration.
+fixtures must be **byte-identical**. For an intentional behavior change, re-record them and let
+git show you what moved:
 
-`CLAUDE.md` has the full architecture reference, including the golden-master workflow in detail.
+```
+PUBLICHOLIDAY_UPDATE_GOLDEN=1 dotnet test        # rewrites the fixtures, reports Inconclusive
+git diff tests/PublicHolidayTests/GoldenMaster   # every changed line must be explainable
+dotnet test                                      # green against the new fixtures
+```
+
+`git checkout` the fixtures if the diff is not what you meant. Every changed line must be
+explainable by your change, and a change to one country may only move that country's fixture —
+anything else that moves is collateral damage from a shared definition, so investigate it before
+committing. Never re-record to make a red test green without reading the diff, and never edit a
+fixture by hand. Remember there are two kinds: the dates fixture per calendar, and `AllNames.txt`
+for names across every configuration.

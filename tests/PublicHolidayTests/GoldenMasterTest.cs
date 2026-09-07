@@ -11,13 +11,15 @@ namespace PublicHolidayTests
 {
     /// <summary>
     /// Golden-master snapshot of every calendar's <c>PublicHolidaysInformation</c> output for
-    /// 1990-2049, including regional/option variants. This is the behavior lock for the 4.0.0
-    /// architecture refactor: any refactoring phase that is supposed to be behavior-preserving
-    /// must leave these fixtures byte-identical.
+    /// 1990-2049, including regional/option variants. It catches collateral damage: the holiday
+    /// definitions are shared, so one edit to <c>Christian.Christmas</c> or
+    /// <c>HolidayCalculator.FixWeekend</c> can move thirty calendars, and the fixture that changed
+    /// says which. It is not the specification - a country's own rules belong in its
+    /// <c>TestXxxPublicHoliday</c> tests, with the date and its source named.
     ///
-    /// First run (fixture file missing) GENERATES the fixture and reports Inconclusive; re-run to
-    /// verify. To intentionally accept a behavior change: delete the affected fixture file(s),
-    /// re-run to regenerate, and review the git diff of the fixtures before committing.
+    /// A missing fixture is generated and reported Inconclusive. To accept an intentional change,
+    /// re-record with <c>PUBLICHOLIDAY_UPDATE_GOLDEN=1 dotnet test</c> and review
+    /// <c>git diff tests/PublicHolidayTests/GoldenMaster</c>. Never edit a fixture by hand.
     /// </summary>
     [TestClass]
     public class GoldenMasterTest
@@ -84,7 +86,7 @@ namespace PublicHolidayTests
             {
                 var actual = Render(variant.Value);
                 var file = Path.Combine(dir, variant.Key + ".txt");
-                if (!File.Exists(file))
+                if (GoldenMasterFixtures.UpdateRequested || !File.Exists(file))
                 {
                     File.WriteAllText(file, actual, new UTF8Encoding(false));
                     generated.Add(variant.Key);
@@ -103,7 +105,8 @@ namespace PublicHolidayTests
             }
             if (generated.Count > 0)
             {
-                Assert.Inconclusive($"Generated {generated.Count} fixture file(s) ({string.Join(", ", generated.Take(5))}...). Re-run to verify against them.");
+                var what = GoldenMasterFixtures.UpdateRequested ? "Re-recorded" : "Generated";
+                Assert.Inconclusive($"{what} {generated.Count} fixture file(s) ({string.Join(", ", generated.Take(5))}...). Review 'git diff tests/PublicHolidayTests/GoldenMaster', then re-run to verify against them.");
             }
         }
 
